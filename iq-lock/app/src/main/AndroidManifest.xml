@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    AndroidManifest.xml — Declares all app components, permissions, and metadata.
+    IQ Lock requires several special permissions:
+      - BIND_ACCESSIBILITY_SERVICE: to detect which app is in the foreground
+      - PACKAGE_USAGE_STATS: to read per-app usage statistics
+      - SYSTEM_ALERT_WINDOW: to draw the lock screen over other apps
+      - RECEIVE_BOOT_COMPLETED: to restart the service after device reboot
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ========== PERMISSIONS ========== -->
+
+    <!-- Required to start the accessibility service -->
+    <uses-permission android:name="android.permission.BIND_ACCESSIBILITY_SERVICE"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Required to query installed packages (Android 11+) -->
+    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+
+    <!-- Required to show lock screen over other apps -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <!-- Required to read usage statistics (granted via Settings UI) -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- Required to auto-start on boot -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+    <!-- Foreground service permission (API 28+) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
+    <!-- Post notifications (API 33+) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Wake lock to keep CPU awake during lock screen -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- ========== APPLICATION ========== -->
+    <application
+        android:name=".IQLockApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.IQLock"
+        tools:targetApi="31">
+
+        <!-- ===== ACTIVITIES ===== -->
+
+        <!-- Main launcher activity — home dashboard -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- App selection — user picks which apps to protect -->
+        <activity
+            android:name=".ui.AppSelectionActivity"
+            android:exported="false"
+            android:label="@string/select_apps"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!-- Statistics — shows daily/weekly unlock data -->
+        <activity
+            android:name=".ui.StatisticsActivity"
+            android:exported="false"
+            android:label="@string/statistics"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!-- Settings — configure timer, difficulty, theme, etc. -->
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:exported="false"
+            android:label="@string/settings"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <!--
+            Lock Screen activity — legacy single-riddle overlay (kept for reference).
+            showOnLockScreen + turnScreenOn ensures it appears even if the device is sleeping.
+        -->
+        <activity
+            android:name=".ui.LockScreenActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.IQLock.LockScreen" />
+
+        <!--
+            Three-Stage Intelligence Lock Screen — the primary unlock overlay.
+            Drives Stage 1 → Stage 2 → Stage 3 (RelationshipEngine master challenge).
+            singleInstance prevents multiple copies stacking; showOnLockScreen +
+            turnScreenOn ensure it surfaces over the device keyguard.
+        -->
+        <activity
+            android:name=".ui.ThreeStageLockActivity"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:launchMode="singleInstance"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/Theme.IQLock.LockScreen" />
+
+        <!-- ===== SERVICES ===== -->
+
+        <!--
+            IQLockAccessibilityService — core service that detects foreground app changes.
+            BIND_ACCESSIBILITY_SERVICE permission ensures only the system can bind to it.
+        -->
+        <service
+            android:name=".service.IQLockAccessibilityService"
+            android:exported="true"
+            android:label="@string/accessibility_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <!-- ===== RECEIVERS ===== -->
+
+        <!-- BootReceiver — restarts the accessibility service after device reboot -->
+        <receiver
+            android:name=".receiver.BootReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+    </application>
+
+</manifest>

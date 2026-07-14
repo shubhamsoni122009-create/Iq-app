@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Spacing scale -->
+    <dimen name="spacing_xs">4dp</dimen>
+    <dimen name="spacing_sm">8dp</dimen>
+    <dimen name="spacing_md">16dp</dimen>
+    <dimen name="spacing_lg">24dp</dimen>
+    <dimen name="spacing_xl">32dp</dimen>
+    <dimen name="spacing_xxl">48dp</dimen>
+
+    <!-- Card -->
+    <dimen name="card_elevation">2dp</dimen>
+    <dimen name="card_corner_radius">16dp</dimen>
+    <dimen name="card_padding">16dp</dimen>
+
+    <!-- Toolbar -->
+    <dimen name="toolbar_height">56dp</dimen>
+
+    <!-- App icon in lists -->
+    <dimen name="app_icon_size">48dp</dimen>
+
+    <!-- Timer display on lock screen -->
+    <dimen name="timer_text_size">64sp</dimen>
+    <dimen name="timer_ring_stroke">8dp</dimen>
+
+    <!-- Question text -->
+    <dimen name="question_text_size">18sp</dimen>
+
+    <!-- Option chip height -->
+    <dimen name="chip_height">48dp</dimen>
+    <dimen name="chip_corner_radius">24dp</dimen>
+
+    <!-- Bottom nav -->
+    <dimen name="bottom_nav_height">56dp</dimen>
+
+    <!-- Banner -->
+    <dimen name="banner_corner_radius">12dp</dimen>
+    <dimen name="banner_margin">12dp</dimen>
+
+    <!-- Progress bar height -->
+    <dimen name="progress_height">8dp</dimen>
+
+    <!-- Stat card icon -->
+    <dimen name="stat_icon_size">32dp</dimen>
+
+    <!-- Min touch target -->
+    <dimen name="min_touch_target">48dp</dimen>
+</resources>

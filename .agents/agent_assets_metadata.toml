@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "nRyyG0XZBg1hLwYnlIc9E"
+uri = "file://iq-lock-source.zip"
+type = "unspecified"
+title = "IQ Lock — With Auto-Build Workflow"

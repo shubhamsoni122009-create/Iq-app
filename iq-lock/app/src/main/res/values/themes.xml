@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        themes.xml — Light theme (and base for all activities).
+        Material Design 3 purple/black palette for IQ Lock.
+    -->
+    <style name="Base.Theme.IQLock" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/purple_600</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/purple_100</item>
+        <item name="colorOnPrimaryContainer">@color/purple_900</item>
+
+        <!-- Secondary brand color -->
+        <item name="colorSecondary">@color/violet_500</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryContainer">@color/violet_100</item>
+        <item name="colorOnSecondaryContainer">@color/violet_700</item>
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/purple_400</item>
+        <item name="colorOnTertiary">@color/purple_900</item>
+
+        <!-- Surfaces -->
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/on_surface_light</item>
+        <item name="colorSurfaceVariant">@color/purple_50</item>
+        <item name="colorOnSurfaceVariant">@color/purple_800</item>
+
+        <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/surface_light</item>
+        <item name="colorBackground">@color/surface_light</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error_red</item>
+        <item name="colorOnError">@color/white</item>
+
+        <!-- Status / navigation bar -->
+        <item name="android:statusBarColor" tools:targetApi="21">@color/purple_800</item>
+        <item name="android:navigationBarColor" tools:targetApi="21">@color/purple_900</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+
+        <!-- Typography scale (Material 3 defaults are fine) -->
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.Material3.DisplayLarge</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.Material3.TitleLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.Material3.BodyMedium</item>
+
+        <!-- Shapes -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.IQLock.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.IQLock.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.IQLock.Large</item>
+    </style>
+
+    <!-- Apply to the app in the manifest -->
+    <style name="Theme.IQLock" parent="Base.Theme.IQLock" />
+
+    <!-- LockScreen uses a full-screen dark overlay theme (no action bar, no system chrome) -->
+    <style name="Theme.IQLock.LockScreen" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="android:colorBackground">@color/surface_dark</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowShowWallpaper">false</item>
+        <item name="android:windowAnimationStyle">@style/Animation.IQLock.LockScreen</item>
+    </style>
+
+    <!-- Lock screen enter/exit animation -->
+    <style name="Animation.IQLock.LockScreen" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_up_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_down_exit</item>
+    </style>
+
+    <!-- Shape appearances -->
+    <style name="ShapeAppearance.IQLock.Small" parent="ShapeAppearance.Material3.SmallComponent">
+        <item name="cornerSize">8dp</item>
+    </style>
+    <style name="ShapeAppearance.IQLock.Medium" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerSize">12dp</item>
+    </style>
+    <style name="ShapeAppearance.IQLock.Large" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSize">16dp</item>
+    </style>
+
+    <!-- Toolbar -->
+    <style name="Widget.IQLock.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/purple_800</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="subtitleTextColor">@color/white_70</item>
+    </style>
+</resources>

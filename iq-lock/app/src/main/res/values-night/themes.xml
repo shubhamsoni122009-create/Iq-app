@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+        themes.xml (night) — Dark theme overrides for IQ Lock.
+        Surfaces become very dark purple / near-black for OLED friendliness.
+    -->
+    <style name="Base.Theme.IQLock" parent="Theme.Material3.DayNight.NoActionBar">
+
+        <!-- Primary stays the same vibrant purple -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/purple_800</item>
+        <item name="colorOnPrimaryContainer">@color/purple_200</item>
+
+        <!-- Secondary -->
+        <item name="colorSecondary">@color/violet_300</item>
+        <item name="colorOnSecondary">@color/purple_900</item>
+        <item name="colorSecondaryContainer">@color/violet_700</item>
+        <item name="colorOnSecondaryContainer">@color/violet_100</item>
+
+        <!-- Tertiary -->
+        <item name="colorTertiary">@color/purple_300</item>
+        <item name="colorOnTertiary">@color/purple_800</item>
+
+        <!-- Surfaces — very dark for OLED -->
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/on_surface_dark</item>
+        <item name="colorSurfaceVariant">@color/surface_variant_dark</item>
+        <item name="colorOnSurfaceVariant">@color/purple_200</item>
+
+        <!-- Backgrounds -->
+        <item name="android:colorBackground">@color/black</item>
+        <item name="colorBackground">@color/black</item>
+
+        <!-- Error -->
+        <item name="colorError">@color/error_red</item>
+        <item name="colorOnError">@color/black</item>
+
+        <!-- Status / navigation bar — pure black for OLED -->
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="Theme.IQLock" parent="Base.Theme.IQLock" />
+</resources>

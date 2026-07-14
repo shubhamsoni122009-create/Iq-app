@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App name -->
+    <string name="app_name">IQ Lock</string>
+    <string name="app_description">Unlock apps by solving IQ challenges</string>
+
+    <!-- Activity labels (referenced in AndroidManifest.xml) -->
+    <string name="select_apps">Select Apps to Protect</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+    <string name="accessibility_service_label">IQ Lock — App Protector</string>
+
+    <!-- MainActivity -->
+    <string name="master_switch_label">IQ Lock Protection</string>
+    <string name="lock_enabled">Protection Active</string>
+    <string name="lock_disabled">Protection Off</string>
+    <string name="weekly_stats_title">This Week</string>
+    <string name="attempts_label">Attempts</string>
+    <string name="successes_label">Successes</string>
+    <string name="failures_label">Failures</string>
+    <string name="success_rate_label">Success Rate</string>
+    <string name="select_apps_title">Protected Apps</string>
+    <string name="statistics_title">Statistics</string>
+    <string name="settings_title">Settings</string>
+
+    <!-- Permission banners -->
+    <string name="banner_accessibility_title">Accessibility Permission Required</string>
+    <string name="banner_accessibility_desc">Tap to enable IQ Lock in Accessibility Settings</string>
+    <string name="banner_usage_stats_title">Usage Access Required</string>
+    <string name="banner_usage_stats_desc">Tap to grant Usage Access permission</string>
+    <string name="banner_overlay_title">Display Over Other Apps Required</string>
+    <string name="banner_overlay_desc">Tap to grant overlay permission</string>
+    <string name="all_permissions_ok">✓ All permissions granted</string>
+
+    <!-- LockScreenActivity -->
+    <string name="locked_app_label">Locked: %s</string>
+    <string name="riddle_number">Riddle %1$d of %2$d</string>
+    <string name="attempt_number">Attempt %d</string>
+    <string name="timer_label">Time Remaining</string>
+    <string name="riddle_1_done">✓ Riddle 1 solved</string>
+    <string name="type_your_answer">Type your answer…</string>
+    <string name="submit_answer">Submit</string>
+    <string name="wrong_answer">Incorrect — try again!</string>
+    <string name="hint_label">Hint</string>
+    <string name="forfeit_attempt">Give Up This Attempt</string>
+
+    <!-- Unlock success -->
+    <string name="unlock_success_title">🎉 Correct!</string>
+    <string name="unlock_success_message">You solved both riddles. Opening app…</string>
+
+    <!-- Failed attempt -->
+    <string name="failed_title">Time\'s Up!</string>
+    <string name="failed_message">You didn\'t solve both riddles in time.</string>
+    <string name="btn_try_again">Try Again with New Riddles</string>
+
+    <!-- Locked out -->
+    <string name="locked_out_title">App Locked</string>
+    <string name="locked_out_message">You\'ve used all your attempts.\nThis app is locked for:</string>
+    <string name="lock_countdown_label">Time Until Unlock</string>
+
+    <!-- AppSelectionActivity -->
+    <string name="select_apps_hint">Search apps…</string>
+    <string name="protect_toggle">Protect</string>
+
+    <!-- StatisticsActivity -->
+    <string name="tab_today">Today</string>
+    <string name="tab_week">Last 7 Days</string>
+    <string name="usage_time_label">Usage Time</string>
+    <string name="no_stats_yet">No unlock events recorded yet.\nProtect some apps and start using them!</string>
+
+    <!-- SettingsActivity -->
+    <string name="unlock_timer_label">Unlock Timer</string>
+    <string name="unlock_timer_desc">Time allowed per challenge attempt</string>
+    <string name="lock_duration_label">Lockout Duration</string>
+    <string name="lock_duration_desc">How long the app stays locked after all attempts fail</string>
+    <string name="difficulty_label">Riddle Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_medium">Medium</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="dark_mode_label">Dark Mode</string>
+    <string name="dark_mode_system">System Default</string>
+    <string name="dark_mode_light">Light</string>
+    <string name="dark_mode_dark">Dark</string>
+    <string name="show_hints_label">Show Hint After 40 Seconds</string>
+
+    <!-- Plurals -->
+    <plurals name="apps_protected">
+        <item quantity="one">%d app protected</item>
+        <item quantity="other">%d apps protected</item>
+    </plurals>
+    <plurals name="attempts_remaining">
+        <item quantity="one">%d attempt remaining — try new riddles?</item>
+        <item quantity="other">%d attempts remaining — try new riddles?</item>
+    </plurals>
+</resources>

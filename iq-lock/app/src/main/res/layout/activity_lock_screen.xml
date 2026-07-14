@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_lock_screen.xml — Full-screen challenge overlay.
+    Theme: Theme.IQLock.LockScreen (dark purple / black).
+
+    Panels (only one visible at a time via View.VISIBLE / View.GONE):
+      panelRiddle     — active challenge
+      panelFailed     — attempt failed, retry offered
+      panelLockedOut  — all attempts exhausted, countdown
+      panelSuccess    — both riddles solved, auto-dismiss
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface_dark"
+    tools:context=".ui.LockScreenActivity">
+
+    <!-- Loading spinner shown during initial riddle load -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:indicatorColor="@color/purple_500" />
+
+    <!-- ══════════════════════════════════════════════════════════════
+         PANEL: Active riddle challenge
+    ══════════════════════════════════════════════════════════════ -->
+    <ScrollView
+        android:id="@+id/panelRiddle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/spacing_md"
+            android:paddingTop="@dimen/spacing_xl"
+            android:paddingBottom="@dimen/spacing_lg">
+
+            <!-- Header: locked app label -->
+            <TextView
+                android:id="@+id/tvLockedApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="@color/purple_200"
+                tools:text="Locked: Instagram" />
+
+            <!-- Attempt number -->
+            <TextView
+                android:id="@+id/tvAttemptNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_xs"
+                android:gravity="center"
+                android:textAppearance="?attr/textAppearanceBodySmall"
+                android:textColor="@color/white_70"
+                tools:text="Attempt 1" />
+
+            <!-- ── Timer ────────────────────────────────────────────── -->
+            <TextView
+                android:id="@+id/tvTimer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:fontFamily="monospace"
+                android:textColor="@color/purple_200"
+                android:textSize="@dimen/timer_text_size"
+                android:textStyle="bold"
+                tools:text="1:15" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/timer_label"
+                android:textAppearance="?attr/textAppearanceLabelSmall"
+                android:textColor="@color/white_40" />
+
+            <!-- ── Riddle navigation ────────────────────────────────── -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_lg"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvRiddleNumber"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textAppearance="?attr/textAppearanceLabelLarge"
+                    android:textColor="?attr/colorPrimary"
+                    tools:text="Riddle 1 of 2" />
+
+                <!-- Green check when riddle 1 is solved -->
+                <TextView
+                    android:id="@+id/tvRiddle1Status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/riddle_1_done"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="@color/success_green"
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- ── Question card ────────────────────────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                app:cardBackgroundColor="@color/surface_variant_dark"
+                app:cardCornerRadius="@dimen/card_corner_radius"
+                app:strokeColor="@color/purple_600"
+                app:strokeWidth="1dp">
+
+                <TextView
+                    android:id="@+id/tvQuestion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/spacing_md"
+                    android:textColor="@color/on_surface_dark"
+                    android:textSize="@dimen/question_text_size"
+                    tools:text="A bat and a ball cost \$1.10. The bat costs \$1.00 more than the ball. How much does the ball cost?" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ── Hint (revealed after 40 seconds) ────────────────── -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_sm"
+                app:cardBackgroundColor="#1A2E0057"
+                app:cardCornerRadius="@dimen/banner_corner_radius"
+                app:strokeColor="@color/purple_400"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/spacing_md">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/hint_label"
+                        android:textAppearance="?attr/textAppearanceLabelSmall"
+                        android:textColor="@color/purple_300" />
+
+                    <TextView
+                        android:id="@+id/tvHint"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/spacing_xs"
+                        android:textColor="@color/white_70"
+                        android:visibility="gone"
+                        tools:text="Set up the equation. Don't trust intuition." />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ── Multiple-choice chip group ──────────────────────── -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipGroupOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:visibility="gone"
+                app:singleSelection="true" />
+
+            <!-- ── Open-ended answer input ──────────────────────────── -->
+            <LinearLayout
+                android:id="@+id/layoutOpenAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    app:boxStrokeColor="@color/purple_500"
+                    app:hintTextColor="@color/purple_300">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etOpenAnswer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/type_your_answer"
+                        android:imeOptions="actionDone"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/on_surface_dark" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSubmitAnswer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:text="@string/submit_answer"
+                    app:backgroundTint="@color/purple_600" />
+            </LinearLayout>
+
+            <!-- ── Forfeit button ──────────────────────────────────── -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnForfeit"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_md"
+                android:text="@string/forfeit_attempt"
+                android:textColor="@color/error_red" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         PANEL: Failed attempt — retry offered
+    ══════════════════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/panelFailed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_xl"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/failed_title"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="@color/error_red" />
+
+        <TextView
+            android:id="@+id/tvFailedMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:gravity="center"
+            android:textColor="@color/white_70"
+            tools:text="2 attempts remaining — try new riddles?" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnRetry"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:text="@string/btn_try_again"
+            app:backgroundTint="@color/purple_600" />
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         PANEL: Locked out — all attempts used
+    ══════════════════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/panelLockedOut"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_xl"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔒"
+            android:textSize="72sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="@string/locked_out_title"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="@color/error_red" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:gravity="center"
+            android:text="@string/locked_out_message"
+            android:textColor="@color/white_70" />
+
+        <TextView
+            android:id="@+id/tvLockCountdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:fontFamily="monospace"
+            android:textColor="@color/purple_200"
+            android:textSize="48sp"
+            android:textStyle="bold"
+            tools:text="04:59" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lock_countdown_label"
+            android:textAppearance="?attr/textAppearanceLabelSmall"
+            android:textColor="@color/white_40" />
+    </LinearLayout>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         PANEL: Success — both riddles solved
+    ══════════════════════════════════════════════════════════════ -->
+    <LinearLayout
+        android:id="@+id/panelSuccess"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_xl"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🎉"
+            android:textSize="72sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:text="@string/unlock_success_title"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="@color/success_green" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:gravity="center"
+            android:text="@string/unlock_success_message"
+            android:textColor="@color/white_70" />
+    </LinearLayout>
+
+</FrameLayout>
