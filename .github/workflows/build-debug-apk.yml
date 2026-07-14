@@ -1,0 +1,89 @@
+name: Build Debug APK
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'iq-lock/**'
+      - '.github/workflows/build-debug-apk.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'iq-lock/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x iq-lock/gradlew
+
+      - name: Build Debug APK
+        run: |
+          cd iq-lock
+          ./gradlew clean assembleDebug --no-daemon --stacktrace
+        env:
+          GRADLE_OPTS: -Xmx2048m -Dfile.encoding=UTF-8
+
+      - name: List APK Files
+        if: success()
+        run: find iq-lock/app/build/outputs -name "*.apk" -type f
+
+      - name: Upload Debug APK
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: iq-lock-debug-apk
+          path: iq-lock/app/build/outputs/apk/debug/
+          retention-days: 30
+          compression-level: 0
+
+      - name: Upload Build Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-reports
+          path: iq-lock/app/build/reports/
+          retention-days: 7
+
+      - name: Create Release Summary
+        if: success()
+        run: |
+          echo "## ✅ Debug APK Build Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Build Type:** Debug" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version:** 1.0.0" >> $GITHUB_STEP_SUMMARY
+          echo "- **Package:** com.iqlock.app.debug" >> $GITHUB_STEP_SUMMARY
+          echo "- **Artifact:** iq-lock-debug-apk" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### How to Download" >> $GITHUB_STEP_SUMMARY
+          echo "1. Go to the Artifacts section of this workflow run" >> $GITHUB_STEP_SUMMARY
+          echo "2. Download **iq-lock-debug-apk**" >> $GITHUB_STEP_SUMMARY
+          echo "3. Extract the ZIP and install on your Android device" >> $GITHUB_STEP_SUMMARY
+
+      - name: Report Build Failure
+        if: failure()
+        run: |
+          echo "## ❌ Build Failed" >> $GITHUB_STEP_SUMMARY
+          echo "Check the logs above for detailed error information." >> $GITHUB_STEP_SUMMARY
