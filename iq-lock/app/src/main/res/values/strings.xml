@@ -11,6 +11,11 @@
     <string name="title_statistics">Statistics</string>
     <string name="title_riddle">Solve the Riddle</string>
 
+    <!-- Navigation Labels (for menu items) -->
+    <string name="select_apps">Select Apps</string>
+    <string name="statistics">Statistics</string>
+    <string name="settings">Settings</string>
+
     <!-- Accessibility Service -->
     <string name="accessibility_service_label">IQ Lock Accessibility Service</string>
     <string name="accessibility_service_description">IQ Lock accessibility service monitors locked applications and displays lock screen when they are accessed.</string>
@@ -39,4 +44,9 @@
     <string name="stat_riddles_solved">Riddles Solved</string>
     <string name="stat_success_rate">Success Rate</string>
     <string name="stat_total_attempts">Total Attempts</string>
+
+    <!-- Lock Screen Strings -->
+    <string name="timer_label">Time remaining</string>
+    <string name="riddle_1_done">✓</string>
+    <string name="hint_label">Hint:</string>
 </resources>
